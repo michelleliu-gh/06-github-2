@@ -4,3 +4,56 @@ author: Michelle Liu
 format: html
 ---
 
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(palmerpenguins)
+```
+
+```{r}
+#| echo: false
+# Install packages if you haven't already
+# install.packages(c("tidyverse", "palmerpenguins"))
+
+library(tidyverse)
+library(palmerpenguins)
+
+# Remove missing values and generate the visualization
+penguins %>%
+  filter(!is.na(flipper_length_mm), !is.na(body_mass_g)) %>%
+  ggplot(aes(x = flipper_length_mm, y = body_mass_g, color = species, shape = species)) +
+  # Add points with high visibility and subtle transparency
+  geom_point(alpha = 0.8, size = 3.5) +
+  # Add linear trend lines per species to highlight structural differences
+  geom_smooth(method = "lm", se = FALSE, size = 1, alpha = 0.7) +
+  # Apply a high-contrast, colorblind-friendly palette matching the official package art
+  scale_color_manual(values = c("Adelie" = "#FF8C00", "Chinstrap" = "#9932CC", "Gentoo" = "#008B8B")) +
+  scale_shape_manual(values = c("Adelie" = 16, "Chinstrap" = 17, "Gentoo" = 18)) +
+  # Add clear, descriptive documentation labels
+  labs(
+    title = "Penguin Size Dimensions at Palmer Station, Antarctica",
+    subtitle = "Relationship between flipper length and body mass across species",
+    x = "Flipper Length (mm)",
+    y = "Body Mass (g)",
+    color = "Species",
+    shape = "Species",
+    caption = "Source: palmerpenguins R package"
+  ) +
+  # Use a minimal foundation theme for a clean look
+  theme_minimal(base_size = 13) +
+  # Customize typography and layout details
+  theme(
+    plot.title = element_text(face = "bold", size = 16, color = "#111111", margin = margin(b = 6)),
+    plot.subtitle = element_text(size = 12, color = "#555555", margin = margin(b = 20)),
+    plot.caption = element_text(size = 9, color = "gray50", face = "italic", margin = margin(t = 15)),
+    legend.position = "bottom",
+    legend.background = element_rect(fill = "#FAFAFA", color = "gray90", size = 0.5),
+    legend.margin = margin(6, 12, 6, 12),
+    panel.grid.major = element_line(color = "#EAEAEA"),
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_text(margin = margin(t = 12)),
+    axis.title.y = element_text(margin = margin(r = 12))
+  )
+```
